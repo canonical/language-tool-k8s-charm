@@ -1,0 +1,48 @@
+# product metadata
+name: language-tool
+version: "6.6.0"
+summary: LanguageTool HTTP Server
+description: |
+  This bundles the LanguageTool embedded HTTP Server.
+license: Apache-2.0
+
+base: ubuntu@24.04
+platforms:
+  amd64:
+
+# entrypoint
+services:
+  language-tool-java-server:
+    command: java -cp /opt/LanguageTool-6.6/languagetool-server.jar org.languagetool.server.HTTPServer --port 8081 --config /opt/server.properties --allow-origin
+
+# dependencies
+parts:
+  build:
+    plugin: nil  # We're manually building    build-packages:
+    build-packages:
+      - unzip
+      - wget
+      - git
+      - make
+      - g++-10
+      - build-essential
+    stage-packages:
+      - openjdk-17-jre
+    source: .
+    override-build: |
+      mkdir -p $CRAFT_PART_INSTALL/opt
+    
+      # Download and unzip LanguageTool
+      wget https://languagetool.org/download/LanguageTool-6.6.zip -O /tmp/LanguageTool-6.6.zip
+      unzip /tmp/LanguageTool-6.6.zip -d $CRAFT_PART_INSTALL/opt/
+    
+      # Clone and build fastText
+      git clone https://github.com/facebookresearch/fastText.git /tmp/fastTextGit
+      make -C /tmp/fastTextGit
+      cp /tmp/fastTextGit/fasttext $CRAFT_PART_INSTALL/opt/fasttext
+    
+      # Download fastText language model
+      wget https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin -O $CRAFT_PART_INSTALL/opt/lid.176.bin
+    
+      # Create server properties file
+      echo -e "fasttextModel=/opt/lid.176.bin\nfasttextBinary=/opt/fasttext" > $CRAFT_PART_INSTALL/opt/server.properties
