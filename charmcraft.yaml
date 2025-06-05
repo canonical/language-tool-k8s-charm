@@ -1,4 +1,4 @@
-name: language-tool-k8s-charm
+name: language-tool-server
 type: charm
 title: |
   language-tool-k8s

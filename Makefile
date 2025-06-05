@@ -14,7 +14,7 @@ nuke: delete-cluster delete-juju
 juju-deploy:
 	juju bootstrap kind-language-tool-dev-cluster language-tool-controller
 	juju add-model language-tool-model
-	juju deploy ./language-tool-k8s-charm_amd64.charm --resource language-tool-image=ghcr.io/edlerd/language-tool:6.6.0
+	juju deploy ./language-tool-server_amd64.charm --resource language-tool-image=ghcr.io/edlerd/language-tool:6.6.0
 
 # ====================================================================
 # Local dev cluster utility targets. (k8s, kustomize, kind, skaffold)
