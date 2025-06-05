@@ -20,6 +20,41 @@ kubectl -n language-tool-model describe pod language-tool-server-0
 kubectl exec -it language-tool-server-0 -c language-tool -n language-tool-model -- /bin/bash
 ```
 
+## Development
+
+To develop this charm, build the OCI image using `rockcraft` and then upload it to ghcr.io.
+
+```bash
+rockcraft pack -v
+rockcraft.skopeo --insecure-policy copy oci-archive:language-tool_6.6.0_amd64.rock docker-daemon:language-tool:6.6.0
+docker tag b48e97207fba ghcr.io/edlerd/language-tool:6.6.0
+docker push ghcr.io/edlerd/language-tool:6.6.0
+```
+
+You can then build the charm using `charmcraft`:
+
+```bash
+charmcraft build
+```
+
+With the charm in place, you can deploy it locally. We use kind to create a local kubernetes cluster and configure juju for it. Only prerequisite is a local docker daemon that Kind can bootstrap the k8s cluster in:
+
+```bash
+make dev
+```
+
+This will create a local Kubernetes cluster using Kind, configure Juju to use it, and deploy the LanguageTool charm. Check the status of the deployment with:
+
+```bash
+juju status
+```
+
+You can tear down the local Kubernetes cluster with:
+
+```bash
+make nuke
+```
+
 ## Release
 
 To build the oci image, execute rockcraft commands as follows:
