@@ -26,9 +26,9 @@ To develop this charm, build the OCI image using `rockcraft` and then upload it 
 
 ```bash
 rockcraft pack -v
-rockcraft.skopeo --insecure-policy copy oci-archive:language-tool_6.6.0_amd64.rock docker-daemon:language-tool:6.6.0
-docker tag b48e97207fba ghcr.io/edlerd/language-tool:6.6.0
-docker push ghcr.io/edlerd/language-tool:6.6.0
+rockcraft.skopeo --insecure-policy copy oci-archive:language-tool_6.6_amd64.rock docker-daemon:language-tool:6.6
+docker tag b48e97207fba ghcr.io/edlerd/language-tool:6.6
+docker push ghcr.io/edlerd/language-tool:6.6
 ```
 
 You can then build the charm using `charmcraft`:
@@ -61,7 +61,7 @@ To build the oci image, execute rockcraft commands as follows:
 
 ```bash
 rockcraft pack
-rockcraft.skopeo --insecure-policy copy oci-archive:language-tool_6.6.0_amd64.rock docker-daemon:language-tool-image:6.6.0
+rockcraft.skopeo --insecure-policy copy oci-archive:language-tool_6.6_amd64.rock docker-daemon:language-tool-image:6.6
 ```
 
 Get the image id and upload it to charmhub:

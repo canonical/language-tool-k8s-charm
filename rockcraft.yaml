@@ -1,5 +1,5 @@
 name: language-tool
-version: "6.6.0"
+version: "6.6"
 summary: LanguageTool HTTP Server
 description: |
   This bundles the LanguageTool embedded HTTP Server.
@@ -29,30 +29,21 @@ parts:
       mkdir -p $CRAFT_PART_INSTALL/opt
     
       # Download and unzip LanguageTool
-      wget https://languagetool.org/download/LanguageTool-6.6.zip --no-verbose -O /tmp/LanguageTool-6.6.zip
-      unzip /tmp/LanguageTool-6.6.zip -d $CRAFT_PART_INSTALL/opt/
+      rm -rf LanguageTool-6.6.zip
+      wget https://languagetool.org/download/LanguageTool-6.6.zip --no-verbose -O LanguageTool-6.6.zip
+      unzip LanguageTool-6.6.zip -d $CRAFT_PART_INSTALL/opt/
     
       # Clone and build fastText
-      git clone https://github.com/facebookresearch/fastText.git /tmp/fastTextGit
-      make -C /tmp/fastTextGit
-      cp /tmp/fastTextGit/fasttext $CRAFT_PART_INSTALL/opt/fasttext
+      rm -rf fastTextGit
+      git clone https://github.com/facebookresearch/fastText.git fastTextGit
+      make -C fastTextGit
+      install -D --mode 0755 fastTextGit/fasttext $CRAFT_PART_INSTALL/opt/fasttext
     
       # Download fastText language model
       wget https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin --no-verbose -O $CRAFT_PART_INSTALL/opt/lid.176.bin
     
       # Create server properties file
       echo -e "fasttextModel=/opt/lid.176.bin\nfasttextBinary=/opt/fasttext" > $CRAFT_PART_INSTALL/opt/server.properties
-    after:
-      - runtime
-
-  runtime:
-    plugin: jlink
-    build-packages:
-      - openjdk-21-jdk
-    jlink-jars:
-      - /opt/LanguageTool-6.6/languagetool-server.jar
-    after:
-      - deps
 
   deps:
     plugin: nil
@@ -62,3 +53,13 @@ parts:
       - libstdc++6_libs
       - zlib1g_libs
       - libnss3_libs
+
+  runtime:
+    plugin: jlink
+    build-packages:
+      - openjdk-21-jdk
+    jlink-jars:
+      - /opt/LanguageTool-6.6/languagetool-server.jar
+    after:
+      - deps
+      - download-and-build

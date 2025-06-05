@@ -30,4 +30,4 @@ resources:
   language-tool-image:
     type: oci-image
     description: OCI image for language tool server
-    upstream-source: ghcr.io/edlerd/language-tool:6.6.0
+    upstream-source: ghcr.io/edlerd/language-tool:6.6
