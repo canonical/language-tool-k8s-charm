@@ -3,7 +3,7 @@ type: charm
 title: |
   language-tool-k8s
 description: |
-  This bundles the LanguageTool embedded HTTP Server
+  This bundles the LanguageTool embedded HTTP Server. Source available at https://github.com/canonical/language-tool-k8s-charm
 summary: |
   LanguageTool HTTP Server
 
